@@ -5,10 +5,10 @@ install:
 format:
 	black *.py
 
-#lint:
-#	pylint --disable=R,C hello.py
+lint:
+	pylint --disable=R,C image_processer.py
 
-#test:
-#	python -m pytest -vv --cov=hello test_hello.py
+test:
+	python -m pytest -vv --cov=hello test_image_processer.py
 
-#all: install lint test
+all: install lint test
