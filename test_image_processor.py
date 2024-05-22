@@ -1,4 +1,4 @@
-from image_processer import ImageProcessor
+from image_processor import ImageProcessor
 import cv2
 import numpy as np
 img = cv2.imread("Test Images/2_50.jpg", cv2.IMREAD_COLOR)
