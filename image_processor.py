@@ -47,5 +47,23 @@ class ImageProcessor():
 
 
     def add_salt_pepper_noise(self):
-        pass
-    
+        """
+            This method add salt and pepper nois to the image
+            
+            Arguments: None
+            Returns: None
+        """
+        row, col = self.image.shape
+        selected_pixel=random.randint(100,5000)
+
+        for i in range(selected_pixel):
+            # set these pixel to white
+            x_white=random.randint(0,col-1)
+            y_white=random.randint(0,row-1)
+            self.image[y_white][x_white]=255
+
+        for i in range(selected_pixel):
+            # set these pixel to black
+            x_black=random.randint(0,col-1)
+            y_black=random.randint(0,row-1)
+            self.image[y_black][x_black]=0
