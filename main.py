@@ -14,7 +14,13 @@ if uploaded_file is not None:
     st.header("Select Processing Method")
     processing_method = st.selectbox(
         "Choose a processing method",
-        ("None", "Convert to Gray", "Add Salt & pepper noise"),
+        (
+            "None",
+            "Convert to Gray",
+            "Add Salt & pepper noise",
+            "Add gussian noise",
+            "Add uniform noise",
+        ),
     )
 
     file_bytes = np.asarray(bytearray(uploaded_file.read()), dtype=np.uint8)
@@ -28,7 +34,10 @@ if uploaded_file is not None:
             processor.convert_to_gry()
         elif processing_method == "Add Salt & pepper noise":
             processor.add_salt_pepper_noise()
-
+        elif processing_method == "Add gussian noise":
+            processor.add_gussian_noise()
+        elif processing_method == "Add uniform noise":
+            processor.add_uniform_noise()
     else:
         pass
 

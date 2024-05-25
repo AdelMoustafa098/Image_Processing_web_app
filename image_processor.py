@@ -82,3 +82,41 @@ class ImageProcessor:
             np.random.randint(0, col, selected_pixel),
         )
         self.image[black_coords] = 0
+
+    def add_gussian_noise(self):
+        """
+        This method adds a gussian noise to a gray image with zero mean and 15 sandard deviation
+
+        Arguments: None
+        Returns: None
+        """
+
+        # make sure image is gray
+        if not self.is_gray():
+            self.convert_to_gry()
+
+        row, col = self.image.shape
+        # create gussian noise
+        mean = 0.0
+        std = 15.0
+        noise = np.random.normal(mean, std, size=(row, col))
+
+        # apply noise
+        self.image = np.add(self.get_image(), noise)
+        self.image = self.image.astype(np.uint8)
+
+    def add_uniform_noise(self):
+        """
+        This method adds a uniform noise to a gray image
+        """
+        # make sure image is gray
+        if not self.is_gray():
+            self.convert_to_gry()
+
+        # create uniform image
+        row, col = self.image.shape
+        noise = np.random.uniform(-20, 20, size=(row, col))
+
+        # apply noise
+        self.image = np.add(self.image, noise)
+        self.image = self.image.astype(np.uint8)
