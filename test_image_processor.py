@@ -57,3 +57,80 @@ def test_add_salt_pepper_noise():
     # Check if there are at least 100 noisy pixels
     noise_count = counts_dict.get(0, 0) + counts_dict.get(255, 0)
     assert noise_count >= 100
+
+
+def test_add_gussian_noise():
+
+    # Create a simple 2x2 grayscale image
+    gray_image = np.array([[100, 150], [200, 250]], dtype=np.uint8)
+
+    # Create an instance of ImageProcessor
+    processor = ImageProcessor(gray_image)
+
+    # Mock the numpy random normal function to produce a predictable output
+    def mock_normal(mean, std, size):
+        return np.array([[5, -5], [10, -10]], dtype=np.float64)
+
+    # Save the original np.random.normal function
+    original_normal = np.random.normal
+
+    # Replace the np.random.normal function with the mock
+    np.random.normal = mock_normal
+
+    try:
+        # Add Gaussian noise
+        processor.add_gussian_noise()
+
+        # Get the noisy image
+        noisy_image = processor.get_image()
+
+        # Expected noisy image
+        expected_noisy_image = np.array([[105, 145], [210, 240]], dtype=np.uint8)
+
+        # Print both images for debugging purposes
+        print("Expected noisy image:\n", expected_noisy_image)
+        print("Actual noisy image:\n", noisy_image)
+
+        # Assert the arrays are equal
+        np.testing.assert_array_equal(noisy_image, expected_noisy_image)
+    finally:
+        # Restore the original np.random.normal function
+        np.random.normal = original_normal
+
+
+def test_add_uniform_noise():
+    # Create a simple 2x2 grayscale image
+    gray_image = np.array([[100, 150], [200, 250]], dtype=np.uint8)
+
+    # Create an instance of ImageProcessor
+    processor = ImageProcessor(gray_image)
+
+    # Mock the numpy random uniform function to produce a predictable output
+    def mock_uniform(low, high, size):
+        return np.array([[10, -10], [5, -5]], dtype=np.float64)
+
+    # Save the original np.random.uniform function
+    original_uniform = np.random.uniform
+
+    # Replace the np.random.uniform function with the mock
+    np.random.uniform = mock_uniform
+
+    try:
+        # Add uniform noise
+        processor.add_uniform_noise()
+
+        # Get the noisy image
+        noisy_image = processor.get_image()
+
+        # Expected noisy image
+        expected_noisy_image = np.array([[110, 140], [205, 245]], dtype=np.uint8)
+
+        # Print both images for debugging purposes
+        print("Expected noisy image:\n", expected_noisy_image)
+        print("Actual noisy image:\n", noisy_image)
+
+        # Assert the arrays are equal
+        np.testing.assert_array_equal(noisy_image, expected_noisy_image)
+    finally:
+        # Restore the original np.random.uniform function
+        np.random.uniform = original_uniform
