@@ -20,6 +20,7 @@ if uploaded_file is not None:
             "Add Salt & pepper noise",
             "Add gussian noise",
             "Add uniform noise",
+            "Average filter (3x3)",
         ),
     )
 
@@ -38,6 +39,9 @@ if uploaded_file is not None:
             processor.add_gussian_noise()
         elif processing_method == "Add uniform noise":
             processor.add_uniform_noise()
+        elif processing_method == "Average filter (3x3)":
+            processor.avg_filter()
+
     else:
         pass
 

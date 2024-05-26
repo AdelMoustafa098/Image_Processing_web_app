@@ -1,4 +1,5 @@
 import numpy as np
+from scipy import signal
 
 
 class ImageProcessor:
@@ -108,6 +109,9 @@ class ImageProcessor:
     def add_uniform_noise(self):
         """
         This method adds a uniform noise to a gray image
+
+        Arguments: None
+        Returns: None
         """
         # make sure image is gray
         if not self.is_gray():
@@ -120,3 +124,27 @@ class ImageProcessor:
         # apply noise
         self.image = np.add(self.image, noise)
         self.image = self.image.astype(np.uint8)
+
+    def apply_mask(self, mask: np.array):
+        """
+        This method take a mask and apply it to the instace image
+
+        Arguments:
+            mask (numpay.array): mask to be appleid
+
+        Returns:None
+        """
+        
+        self.image = signal.convolve2d(np.reshape(self.image, (-1, 2)), mask)
+        self.image = self.image.astype(np.uint8)
+
+    def avg_filter(self):
+        """
+        This method applys a 3x3 average filter on a gray image
+
+        Arguments: None
+        Returns: None
+        """
+        mask = np.ones([3, 3], dtype=int)
+        mask = mask / 9
+        self.apply_mask(mask)
