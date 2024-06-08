@@ -15,7 +15,7 @@ def test_get_image():
 def test_reset_image():
 
     ip = ImageProcessor(img)
-    ip.convert_to_gry()
+    ip.convert_to_gray()
     ip.reset_image()
     reset_image = ip.get_image()
     np.testing.assert_array_equal(reset_image, img)
@@ -31,7 +31,7 @@ def test_convert_to_gray():
     expected_gray_image = np.array([[29, 149], [76, 254]], dtype=np.uint8)
 
     ip = ImageProcessor(rgb_image)
-    ip.convert_to_gry()
+    ip.convert_to_gray()
     gray_image = ip.get_image()
 
     np.testing.assert_allclose(gray_image, expected_gray_image, atol=1)
@@ -59,7 +59,7 @@ def test_add_salt_pepper_noise():
     assert noise_count >= 100
 
 
-def test_add_gussian_noise():
+def test_add_gaussian_noise():
 
     # Create a simple 2x2 grayscale image
     gray_image = np.array([[100, 150], [200, 250]], dtype=np.uint8)
@@ -79,7 +79,7 @@ def test_add_gussian_noise():
 
     try:
         # Add Gaussian noise
-        processor.add_gussian_noise()
+        processor.add_gaussian_noise()
 
         # Get the noisy image
         noisy_image = processor.get_image()
