@@ -5,19 +5,19 @@ from scipy import signal
 class ImageProcessor:
     """
     This class is used for image processing
+    original
     """
 
     def __init__(self, image):
         self.image = image
-        self.orignal_image = image
-        self.gray_image = False
+        self.original_image = image
 
     def get_image(self):
         """
         This method returns the image
 
         Arguments: None
-        Returns: image (numpay array)
+        Returns: image (numpy array)
         """
         return self.image
 
@@ -28,7 +28,7 @@ class ImageProcessor:
         Arguments: None
         Returns: None
         """
-        self.image = self.orignal_image
+        self.image = self.original_image
 
     def is_gray(self):
         """
@@ -39,13 +39,13 @@ class ImageProcessor:
         """
         return len(self.image.shape) == 2
 
-    def convert_to_gry(self):
+    def convert_to_gray(self):
         """
-        This method convert an RGB image to gray scale image doing the follwoing:
+        This method convert an RGB image to gray scale image doing the following:
 
             1- extract the rgb channels from the image.
             2- multiply each channel by a constant and sum the result.
-            3- convert the result from step 2 to a sutible data type.
+            3- convert the result from step 2 to a suitable data type.
 
         Arguments: None
         Returns: None
@@ -65,7 +65,7 @@ class ImageProcessor:
         """
         # make sure image is gray
         if not self.is_gray():
-            self.convert_to_gry()
+            self.convert_to_gray()
 
         row, col = self.image.shape
         selected_pixel = np.random.randint(100, 5000)
@@ -84,9 +84,9 @@ class ImageProcessor:
         )
         self.image[black_coords] = 0
 
-    def add_gussian_noise(self):
+    def add_gaussian_noise(self):
         """
-        This method adds a gussian noise to a gray image with zero mean and 15 sandard deviation
+        This method adds a gaussian noise to a gray image with zero mean and 15 standard deviation
 
         Arguments: None
         Returns: None
@@ -94,10 +94,10 @@ class ImageProcessor:
 
         # make sure image is gray
         if not self.is_gray():
-            self.convert_to_gry()
+            self.convert_to_gray()
 
         row, col = self.image.shape
-        # create gussian noise
+        # create gaussian noise
         mean = 0.0
         std = 15.0
         noise = np.random.normal(mean, std, size=(row, col))
@@ -115,7 +115,7 @@ class ImageProcessor:
         """
         # make sure image is gray
         if not self.is_gray():
-            self.convert_to_gry()
+            self.convert_to_gray()
 
         # create uniform image
         row, col = self.image.shape
@@ -127,20 +127,21 @@ class ImageProcessor:
 
     def apply_mask(self, mask: np.array):
         """
-        This method take a mask and apply it to the instace image
+        This method take a mask and apply it to the instance image
 
         Arguments:
-            mask (numpay.array): mask to be appleid
+            mask (numpy.array): mask to be applied
 
         Returns:None
         """
-        
-        self.image = signal.convolve2d(np.reshape(self.image, (-1, 2)), mask)
+        if not self.is_gray():
+            self.convert_to_gray()
+        self.image = signal.convolve2d(self.get_image(), mask)
         self.image = self.image.astype(np.uint8)
 
     def avg_filter(self):
         """
-        This method applys a 3x3 average filter on a gray image
+        This method applies a 3x3 average filter on a gray image
 
         Arguments: None
         Returns: None
