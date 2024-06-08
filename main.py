@@ -18,7 +18,7 @@ if uploaded_file is not None:
             "None",
             "Convert to Gray",
             "Add Salt & pepper noise",
-            "Add gussian noise",
+            "Add gaussian noise",
             "Add uniform noise",
             "Average filter (3x3)",
         ),
@@ -32,11 +32,11 @@ if uploaded_file is not None:
 
     if processing_method != "None":
         if processing_method == "Convert to Gray":
-            processor.convert_to_gry()
+            processor.convert_to_gray()
         elif processing_method == "Add Salt & pepper noise":
             processor.add_salt_pepper_noise()
-        elif processing_method == "Add gussian noise":
-            processor.add_gussian_noise()
+        elif processing_method == "Add gaussian noise":
+            processor.add_gaussian_noise()
         elif processing_method == "Add uniform noise":
             processor.add_uniform_noise()
         elif processing_method == "Average filter (3x3)":
