@@ -149,3 +149,38 @@ class ImageProcessor:
         mask = np.ones([3, 3], dtype=int)
         mask = mask / 9
         self.apply_mask(mask)
+
+    def gaussian_filter(self):
+        """
+        This method applies a Gaussian filter with a sigma of 2.6 and a kernel size of (9, 9).
+
+        Arguments: None
+        Returns: None
+        """
+
+        # Define the standard deviation (sigma) and the size of the Gaussian kernel
+        sigma = 2.6
+        kernel_size = (9, 9)
+
+        # Calculate the center coordinates of the kernel
+        center_y, center_x = [(size - 1.0) / 2.0 for size in kernel_size]
+
+        # Generate a grid of (y, x) coordinates
+        y, x = np.ogrid[-center_y : center_y + 1, -center_x : center_x + 1]
+
+        # Compute the Gaussian function
+        gaussian_kernel = np.exp(-(x * x + y * y) / (2.0 * sigma * sigma))
+
+        # Set very small values to zero
+        gaussian_kernel[
+            gaussian_kernel
+            < np.finfo(gaussian_kernel.dtype).eps * gaussian_kernel.max()
+        ] = 0
+
+        # Normalize the kernel so that its sum is 1
+        kernel_sum = gaussian_kernel.sum()
+        if kernel_sum != 0:
+            gaussian_kernel /= kernel_sum
+
+        # Apply the Gaussian filter to the image
+        return self.apply_mask(gaussian_kernel)
