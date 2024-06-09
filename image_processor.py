@@ -183,4 +183,35 @@ class ImageProcessor:
             gaussian_kernel /= kernel_sum
 
         # Apply the Gaussian filter to the image
-        return self.apply_mask(gaussian_kernel)
+        self.apply_mask(gaussian_kernel)
+
+    def sobel_edge(self):
+        """
+        This method applies a sobel edge detector.
+
+        Arguments: None
+        Returns: None
+        """
+        # Apply Gaussian filter to smooth the image
+        self.gaussian_filter()
+
+        # Define Sobel kernels
+        kx = np.array([[1, 0, -1], [2, 0, -2], [1, 0, -1]])
+        ky = kx.T
+
+        # Compute gradients using convolution
+        Ix = signal.convolve2d(self.get_image(), kx, mode="same", boundary="symm")
+        Iy = signal.convolve2d(self.get_image(), ky, mode="same", boundary="symm")
+
+        # Calculate magnitude and direction of the gradient
+        magnitude = np.hypot(Ix, Iy)
+        direction = np.arctan2(Iy, Ix)
+
+        # Convert direction to degrees and shift range from [-180, 180] to [0, 360]
+        direction = np.rad2deg(direction) + 180
+
+        # Convert to uint8 type
+        self.image = np.clip(magnitude, 0, 255).astype(np.uint8)
+
+
+

@@ -22,6 +22,7 @@ if uploaded_file is not None:
             "Add uniform noise",
             "Average filter (3x3)",
             "Gaussian filter",
+            "Sobel Edge",
         ),
     )
 
@@ -44,7 +45,8 @@ if uploaded_file is not None:
             processor.avg_filter()
         elif processing_method == "Gaussian filter":
             processor.gaussian_filter()
-
+        elif processing_method == "Sobel Edge":
+            processor.sobel_edge()
     else:
         pass
 
