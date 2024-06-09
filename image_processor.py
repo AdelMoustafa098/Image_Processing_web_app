@@ -30,16 +30,17 @@ class ImageProcessor:
         """
         self.image = self.original_image
 
-    def is_gray(self):
+    def is_gray(self, image: np.array):
         """
         This method checks if the image is gray scale.
 
-        Arguments: None
+        Arguments:
+            image (numpy.array): image which to be cheked
         Returns: bool
         """
-        return len(self.image.shape) == 2
+        return len(image.shape) == 2
 
-    def convert_to_gray(self):
+    def convert_to_gray(self, image: np.array):
         """
         This method convert an RGB image to gray scale image doing the following:
 
@@ -47,14 +48,18 @@ class ImageProcessor:
             2- multiply each channel by a constant and sum the result.
             3- convert the result from step 2 to a suitable data type.
 
-        Arguments: None
-        Returns: None
+        Arguments:
+            image (numpy.array): image to be converted to gray
+        Returns:
+            gray_image (numpy.array): gray image
 
         """
 
-        b, g, r = self.image[:, :, 0], self.image[:, :, 1], self.image[:, :, 2]
+        b, g, r = image[:, :, 0], image[:, :, 1], image[:, :, 2]
         gray = 0.2989 * r + 0.5870 * g + 0.1140 * b
         self.image = gray.astype(np.uint8)
+        gray_image = gray.astype(np.uint8)
+        return gray_image
 
     def add_salt_pepper_noise(self):
         """
@@ -64,8 +69,8 @@ class ImageProcessor:
         Returns: None
         """
         # make sure image is gray
-        if not self.is_gray():
-            self.convert_to_gray()
+        if not self.is_gray(self.image):
+            self.image = self.convert_to_gray(self.image)
 
         row, col = self.image.shape
         selected_pixel = np.random.randint(100, 5000)
@@ -93,8 +98,8 @@ class ImageProcessor:
         """
 
         # make sure image is gray
-        if not self.is_gray():
-            self.convert_to_gray()
+        if not self.is_gray(self.image):
+            self.image = self.convert_to_gray(self.image)
 
         row, col = self.image.shape
         # create gaussian noise
@@ -114,8 +119,8 @@ class ImageProcessor:
         Returns: None
         """
         # make sure image is gray
-        if not self.is_gray():
-            self.convert_to_gray()
+        if not self.is_gray(self.image):
+            self.image = self.convert_to_gray(self.image)
 
         # create uniform image
         row, col = self.image.shape
@@ -125,19 +130,22 @@ class ImageProcessor:
         self.image = np.add(self.image, noise)
         self.image = self.image.astype(np.uint8)
 
-    def apply_mask(self, mask: np.array):
+    def apply_mask(self, image: np.array, mask: np.array):
         """
         This method take a mask and apply it to the instance image
 
         Arguments:
+            image (numpy.array): image which the mask is going to be applied on
             mask (numpy.array): mask to be applied
 
-        Returns:None
+        Returns:
+            masked_image (numpy.array): image after mask application
         """
-        if not self.is_gray():
-            self.convert_to_gray()
-        self.image = signal.convolve2d(self.get_image(), mask)
-        self.image = self.image.astype(np.uint8)
+        if not self.is_gray(image):
+            image = self.convert_to_gray(image)
+        image = signal.convolve2d(image, mask)
+        masked_image = image.astype(np.uint8)
+        return masked_image
 
     def avg_filter(self):
         """
@@ -148,7 +156,7 @@ class ImageProcessor:
         """
         mask = np.ones([3, 3], dtype=int)
         mask = mask / 9
-        self.apply_mask(mask)
+        self.image = self.apply_mask(self.image, mask)
 
     def gaussian_filter(self):
         """
@@ -183,7 +191,7 @@ class ImageProcessor:
             gaussian_kernel /= kernel_sum
 
         # Apply the Gaussian filter to the image
-        self.apply_mask(gaussian_kernel)
+        self.image = self.apply_mask(self.image, gaussian_kernel)
 
     def sobel_edge(self):
         """
@@ -213,5 +221,25 @@ class ImageProcessor:
         # Convert to uint8 type
         self.image = np.clip(magnitude, 0, 255).astype(np.uint8)
 
+    def roberts_edge(self):
+        """
+        This method applies a roberts edge detector.
 
+        Arguments: None
+        Returns: None
+        """
 
+        mask_x = np.array([[0, 0, 0],
+                           [0, 1, 0],
+                           [0, 0, -1]])
+
+        mask_y = np.array([[0, 0, 0],
+                           [0, 0, 1],
+                           [0, -1, 0]])
+
+        self.gaussian_filter()
+        mask_x_dirc = self.apply_mask(self.image, mask_x)
+        mask_y_dirc = self.apply_mask(self.image, mask_y)
+
+        gradient = np.sqrt(np.square(mask_x_dirc) + np.square(mask_y_dirc))
+        self.image = np.uint8((gradient * 255.0) / gradient.max())
