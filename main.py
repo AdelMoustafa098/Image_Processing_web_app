@@ -23,6 +23,7 @@ if uploaded_file is not None:
             "Average filter (3x3)",
             "Gaussian filter",
             "Sobel Edge",
+            "Roberts Edge",
         ),
     )
 
@@ -34,7 +35,7 @@ if uploaded_file is not None:
 
     if processing_method != "None":
         if processing_method == "Convert to Gray":
-            processor.convert_to_gray()
+            processor.convert_to_gray(image)
         elif processing_method == "Add Salt & pepper noise":
             processor.add_salt_pepper_noise()
         elif processing_method == "Add gaussian noise":
@@ -47,6 +48,8 @@ if uploaded_file is not None:
             processor.gaussian_filter()
         elif processing_method == "Sobel Edge":
             processor.sobel_edge()
+        elif processing_method == "Roberts Edge":
+            processor.roberts_edge()
     else:
         pass
 
