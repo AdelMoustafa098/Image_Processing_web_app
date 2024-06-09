@@ -229,13 +229,9 @@ class ImageProcessor:
         Returns: None
         """
 
-        mask_x = np.array([[0, 0, 0],
-                           [0, 1, 0],
-                           [0, 0, -1]])
+        mask_x = np.array([[0, 0, 0], [0, 1, 0], [0, 0, -1]])
 
-        mask_y = np.array([[0, 0, 0],
-                           [0, 0, 1],
-                           [0, -1, 0]])
+        mask_y = np.array([[0, 0, 0], [0, 0, 1], [0, -1, 0]])
 
         self.gaussian_filter()
         mask_x_dirc = self.apply_mask(self.image, mask_x)

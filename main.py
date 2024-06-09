@@ -7,7 +7,7 @@ import numpy as np
 st.title("Welcome to Image Processor")
 
 st.header("Upload Image")
-uploaded_file = st.file_uploader("Choose an image...",  type=["jpg", "png"])
+uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "png"])
 
 if uploaded_file is not None:
     # Display the dropdown menu above the images

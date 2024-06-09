@@ -15,7 +15,7 @@ def test_get_image():
 def test_reset_image():
 
     ip = ImageProcessor(img)
-    ip.convert_to_gray()
+    _ = ip.convert_to_gray(img)
     ip.reset_image()
     reset_image = ip.get_image()
     np.testing.assert_array_equal(reset_image, img)
@@ -31,8 +31,7 @@ def test_convert_to_gray():
     expected_gray_image = np.array([[29, 149], [76, 254]], dtype=np.uint8)
 
     ip = ImageProcessor(rgb_image)
-    ip.convert_to_gray()
-    gray_image = ip.get_image()
+    gray_image = ip.convert_to_gray(rgb_image)
 
     np.testing.assert_allclose(gray_image, expected_gray_image, atol=1)
 
