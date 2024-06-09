@@ -1,6 +1,7 @@
 from image_processor import ImageProcessor
 import cv2
 import numpy as np
+from scipy import signal
 
 img = cv2.imread("Test Images/2_50.jpg", cv2.IMREAD_COLOR)
 
@@ -133,3 +134,23 @@ def test_add_uniform_noise():
     finally:
         # Restore the original np.random.uniform function
         np.random.uniform = original_uniform
+
+
+def test_apply_mask():
+    # Create a simple test image
+    image = np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9]], dtype=np.uint8)
+
+    # Define a simple mask for testing
+    mask = np.array([[1, 0, -1], [1, 0, -1], [1, 0, -1]], dtype=np.float32)
+
+    ip = ImageProcessor(image)
+    masked_image = ip.apply_mask(image, mask)
+
+    # Expected output after applying mask
+    expected_masked_image = signal.convolve2d(image, mask).astype(np.uint8)
+
+    # Print both arrays for debugging
+    print("Masked Image:\n", masked_image)
+    print("Expected Masked Image:\n", expected_masked_image)
+
+    np.testing.assert_array_equal(masked_image, expected_masked_image)
